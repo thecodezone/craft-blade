@@ -1,0 +1,40 @@
+{
+    "name": "thecodezone/craft-blade",
+    "description": "Adds Laravel Blade templating support to Craft CMS.",
+    "version": "0.0.0",
+    "type": "craft-plugin",
+    "keywords": ["craft", "laravel", "blade", "template"],
+    "support": {
+        "email": "craig@codezone.io",
+        "issues": "https://github.com/thecodezone/craft-blade/issues?state=open",
+        "source": "https://github.com/thecodezone/craft-blade",
+        "docs": "https://github.com/thecodezone/craft-blade/blob/master/README.md"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Craig Wann",
+            "email": "craig@codezone.io"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.1.0",
+        "illuminate/view": "5.5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "CodeZone\\Blade\\": "src/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.0"
+        }
+    },
+    "extra": {
+        "handle": "blade",
+        "name": "Blade",
+        "documentationUrl": "https://github.com/thecodezone/craft-blade/blob/master/README.md",
+        "hasCpSection": false
+    }
+}
