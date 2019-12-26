@@ -3,6 +3,7 @@
 namespace CodeZone\Blade;
 
 use craft\models\Site;
+use craft\web\twig\Extension;
 use craft\web\twig\variables\CraftVariable;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\Container as ContainerInterface;
@@ -13,6 +14,10 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\Factory;
 use Illuminate\View\ViewServiceProvider;
+use phpDocumentor\Reflection\Types\Void_;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 class Blade implements FactoryContract
 {
@@ -28,20 +33,29 @@ class Blade implements FactoryContract
      * @var BladeCompiler
      */
     private $compiler;
+    /**
+     * @var Extension
+     */
+    private $twigExtensions;
 
+    /**
+     * Blade constructor.
+     * @param $viewPaths
+     * @param string $cachePath
+     * @param ContainerInterface|null $container
+     */
     public function __construct($viewPaths, string $cachePath, ContainerInterface $container = null)
     {
         $this->container = $container ?: new Container;
         $this->setupContainer((array)$viewPaths, $cachePath);
         (new ViewServiceProvider($this->container))->register();
         $this->factory = $this->container->get('view');
-        $this->compiler = $this->container->get('blade.compiler');
-        $this->shareData();
-    }
+        $this->twigExtensions = new Extension(new \craft\web\View, new Environment(new FilesystemLoader));
 
-    public function shareData()
-    {
-        $this->share('craft', new CraftVariable());
+        $this->registerCompiler();
+        $this->registerGlobals();
+        $this->registerFunctions();
+        $this->registerGlobals();
     }
 
     public function render(string $view, array $data = [], array $mergeData = []): string
@@ -120,5 +134,23 @@ class Blade implements FactoryContract
                 'view.compiled' => $cachePath,
             ];
         }, true);
+    }
+
+    protected function registerCompiler()
+    {
+        $this->container['blade.compiler']->extend(function ($view) {
+            return $this->container[CompilerExtension::class]->compile($view);
+        });
+        $this->compiler = $this->container->get('blade.compiler');
+    }
+
+    protected function registerGlobals()
+    {
+        $this->share($this->twigExtensions->getGlobals());
+    }
+
+    protected function registerFunctions()
+    {
+        $this->share('functions', new Functions);
     }
 }
