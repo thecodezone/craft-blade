@@ -2,9 +2,8 @@
 
 namespace CodeZone\Blade;
 
-use craft\models\Site;
+use CodeZone\Blade\Directives\Cache;
 use craft\web\twig\Extension;
-use craft\web\twig\variables\CraftVariable;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\Container as ContainerInterface;
 use Illuminate\Contracts\View\Factory as FactoryContract;
@@ -14,10 +13,6 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\Factory;
 use Illuminate\View\ViewServiceProvider;
-use phpDocumentor\Reflection\Types\Void_;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-use Twig\TwigFunction;
 
 class Blade implements FactoryContract
 {
@@ -37,6 +32,12 @@ class Blade implements FactoryContract
      * @var Extension
      */
     private $twigExtensions;
+    /**
+     * @var array
+     */
+    private $directives = [
+        Cache::class
+    ];
 
     /**
      * Blade constructor.
@@ -50,12 +51,12 @@ class Blade implements FactoryContract
         $this->setupContainer((array)$viewPaths, $cachePath);
         (new ViewServiceProvider($this->container))->register();
         $this->factory = $this->container->get('view');
-        $this->twigExtensions = new Extension(new \craft\web\View, new Environment(new FilesystemLoader));
 
         $this->registerCompiler();
         $this->registerGlobals();
         $this->registerFunctions();
         $this->registerGlobals();
+        $this->registerDirectives();
     }
 
     public function render(string $view, array $data = [], array $mergeData = []): string
@@ -146,11 +147,18 @@ class Blade implements FactoryContract
 
     protected function registerGlobals()
     {
-        $this->share($this->twigExtensions->getGlobals());
+        $this->share(\Craft::$app->view->getTwig()->getGlobals());
     }
 
     protected function registerFunctions()
     {
         $this->share('functions', new Functions);
+    }
+
+    protected function registerDirectives()
+    {
+        foreach ($this->directives as $className) {
+            (new $className)->register($this);
+        }
     }
 }

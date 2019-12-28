@@ -3,20 +3,10 @@
 
 namespace CodeZone\Blade;
 
-
-use craft\web\twig\Extension;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-
 class Filters
 {
 
     protected $extension;
-
-    public function __construct()
-    {
-        $this->extension = new Extension(new \craft\web\View, new Environment(new FilesystemLoader));
-    }
 
     /**
      * Pass calls along to twig filters.
@@ -46,7 +36,7 @@ class Filters
      */
     protected function _find($name)
     {
-        return collect($this->extension->getFilters())->first(function($filter) use ($name) {
+        return collect(\Craft::$app->view->getTwig()->getFilters())->first(function($filter) use ($name) {
             return $filter->getName() === $name;
         });
     }

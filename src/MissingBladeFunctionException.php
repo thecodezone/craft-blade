@@ -4,7 +4,7 @@
 namespace CodeZone\Blade;
 
 
-class z extends \Exception
+class MissingBladeFunctionException extends \Exception
 {
 
 }

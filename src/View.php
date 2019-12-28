@@ -3,6 +3,7 @@
 namespace CodeZone\Blade;
 
 use Craft;
+use Illuminate\Support\Str;
 use Twig\Error\LoaderError as TwigLoaderError;
 use Twig\Error\RuntimeError as TwigRuntimeError;
 use Twig\Error\SyntaxError as TwigSyntaxError;
@@ -92,8 +93,12 @@ class View extends \craft\web\View
         $this->setTemplateMode($templateMode);
 
         $e = null;
+
+        $viewPath = str_replace('.blade.php', '', $template);
+        $viewPath = str_replace('/', '.', $viewPath);
+
         try {
-            $output = $this->getBlade()->render($template, $variables);
+            $output = $this->getBlade()->render($viewPath, $variables);
         } catch (\Throwable $e) {
             // throw it later
         }
