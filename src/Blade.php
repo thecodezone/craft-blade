@@ -28,16 +28,6 @@ class Blade implements FactoryContract
      * @var BladeCompiler
      */
     private $compiler;
-    /**
-     * @var Extension
-     */
-    private $twigExtensions;
-    /**
-     * @var array
-     */
-    private $directives = [
-        Cache::class
-    ];
 
     /**
      * Blade constructor.
@@ -53,10 +43,6 @@ class Blade implements FactoryContract
         $this->factory = $this->container->get('view');
 
         $this->registerCompiler();
-        $this->registerGlobals();
-        $this->registerFunctions();
-        $this->registerGlobals();
-        $this->registerDirectives();
     }
 
     public function render(string $view, array $data = [], array $mergeData = []): string
@@ -145,20 +131,18 @@ class Blade implements FactoryContract
         $this->compiler = $this->container->get('blade.compiler');
     }
 
-    protected function registerGlobals()
+    public function push($section, $content)
     {
-        $this->share(\Craft::$app->view->getTwig()->getGlobals());
+        $this->startPush($section, $content);
     }
 
-    protected function registerFunctions()
+    public function startPush($section, $content = '')
     {
-        $this->share('functions', new Functions);
+        $this->factory->startPush($section, $content);
     }
 
-    protected function registerDirectives()
+    public function stopPush()
     {
-        foreach ($this->directives as $className) {
-            (new $className)->register($this);
-        }
+        $this->factory->stopPush();
     }
 }

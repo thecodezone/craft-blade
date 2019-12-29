@@ -2,6 +2,13 @@
 
 namespace CodeZone\Blade;
 
+use CodeZone\Blade\Directives\Cache;
+use CodeZone\Blade\Directives\Css;
+use CodeZone\Blade\Directives\Dd;
+use CodeZone\Blade\Directives\Directives;
+use CodeZone\Blade\Directives\ExitDirective;
+use CodeZone\Blade\Directives\Header;
+use CodeZone\Blade\Directives\Hook;
 use Craft;
 use Illuminate\Support\Str;
 use Twig\Error\LoaderError as TwigLoaderError;
@@ -19,6 +26,15 @@ class View extends \craft\web\View
      * @var
      */
     private $_blade;
+
+    public function init()
+    {
+        parent::init();
+        $this->registerGlobals();
+        $this->registerFunctions();
+        $this->registerDirectives();
+        $this->registerSlots();
+    }
 
     /**
      * Get the blade instance
@@ -112,5 +128,30 @@ class View extends \craft\web\View
         $this->afterRenderTemplate($template, $variables, $templateMode, $output);
 
         return $output;
+    }
+
+    protected function registerGlobals()
+    {
+        $this->getBlade()->share($this->getTwig()->getGlobals());
+    }
+
+    protected function registerFunctions()
+    {
+        $this->getBlade()->share('functions', new Functions);
+    }
+
+    protected function registerDirectives()
+    {
+        (new Directives($this->getBlade(), $this))->register();
+    }
+
+    /**
+     * Pass along any plugin-generated markup to optional stacks.
+     */
+    protected function registerSlots()
+    {
+        $this->getBlade()->push('head', $this->renderHeadHtml());
+        $this->getBlade()->push('body-begin', $this->renderBodyBeginHtml());
+        $this->getBlade()->push('body-end', $this->renderBodyEndHtml(\Craft::$app->getRequest()->isAjax));
     }
 }
