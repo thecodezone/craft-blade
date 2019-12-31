@@ -4,21 +4,12 @@ namespace CodeZone\Blade;
 
 use craft\helpers\App;
 
+/**
+ * Class Plugin
+ * @package CodeZone\Blade
+ */
 class Plugin extends \craft\base\Plugin
 {
-    const EDITION_LITE = 'lite';
-    const EDITION_PRO = 'pro';
-
-
-    public static function editions(): array
-    {
-        return [
-            self::EDITION_LITE,
-            self::EDITION_PRO,
-        ];
-    }
-
-
     public function init()
     {
         $this->adjustConfig();
@@ -29,13 +20,23 @@ class Plugin extends \craft\base\Plugin
     /**
      * Add blade extension to default template extensions to the config.
      */
-    public function adjustConfig()
+    protected function adjustConfig()
     {
-        $generalConfig = \Craft::$app->getConfig()->getGeneral();
-        $extensions = $generalConfig->defaultTemplateExtensions;
-        $generalConfig->defaultTemplateExtensions = array_unique(
-            array_merge($extensions, ['blade.php'])
-        );
+        if ($this->viewRegistered()) {
+            $generalConfig = \Craft::$app->getConfig()->getGeneral();
+            $extensions = $generalConfig->defaultTemplateExtensions;
+            $generalConfig->defaultTemplateExtensions = array_unique(
+                array_merge($extensions, ['blade.php'])
+            );
+        }
+    }
+
+    /**
+     * The developer may not have loaded the view.
+     */
+    public function viewRegistered()
+    {
+        return get_class(\Craft::$app->getView()) === View::class;
     }
 
     /**
@@ -53,14 +54,6 @@ class Plugin extends \craft\base\Plugin
         $config = [
             'class' => View::class,
         ];
-
-        $request = \Craft::$app->getRequest();
-
-        if ($request->getIsCpRequest()) {
-            $headers = $request->getHeaders();
-            $config['registeredAssetBundles'] = explode(',', $headers->get('X-Registered-Asset-Bundles', ''));
-            $config['registeredJsFiles'] = explode(',', $headers->get('X-Registered-Js-Files', ''));
-        }
 
         return $config;
     }

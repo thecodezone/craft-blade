@@ -1,2 +1,4 @@
 /vendor/
 /.idea
+/tests/_craft/storage/
+/tests/.env

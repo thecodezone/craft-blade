@@ -2,15 +2,9 @@
 
 namespace CodeZone\Blade;
 
-use CodeZone\Blade\Directives\Cache;
 use CodeZone\Blade\Directives\Css;
-use CodeZone\Blade\Directives\Dd;
 use CodeZone\Blade\Directives\Directives;
-use CodeZone\Blade\Directives\ExitDirective;
-use CodeZone\Blade\Directives\Header;
-use CodeZone\Blade\Directives\Hook;
 use Craft;
-use Illuminate\Support\Str;
 use Twig\Error\LoaderError as TwigLoaderError;
 use Twig\Error\RuntimeError as TwigRuntimeError;
 use Twig\Error\SyntaxError as TwigSyntaxError;
@@ -33,7 +27,6 @@ class View extends \craft\web\View
         $this->registerGlobals();
         $this->registerFunctions();
         $this->registerDirectives();
-        $this->registerSlots();
     }
 
     /**
@@ -113,6 +106,8 @@ class View extends \craft\web\View
         $viewPath = str_replace('.blade.php', '', $template);
         $viewPath = str_replace('/', '.', $viewPath);
 
+        $this->registerSlots();
+
         try {
             $output = $this->getBlade()->render($viewPath, $variables);
         } catch (\Throwable $e) {
@@ -151,7 +146,7 @@ class View extends \craft\web\View
     protected function registerSlots()
     {
         $this->getBlade()->push('head', $this->renderHeadHtml());
-        $this->getBlade()->push('body-begin', $this->renderBodyBeginHtml());
-        $this->getBlade()->push('body-end', $this->renderBodyEndHtml(\Craft::$app->getRequest()->isAjax));
+        $this->getBlade()->push('begin', $this->renderBodyBeginHtml());
+        $this->getBlade()->push('end', $this->renderBodyEndHtml(\Craft::$app->getRequest()->isAjax));
     }
 }

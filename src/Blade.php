@@ -133,6 +133,9 @@ class Blade implements FactoryContract
 
     public function push($section, $content)
     {
+        if (!$content) {
+            return;
+        }
         $this->startPush($section, $content);
     }
 

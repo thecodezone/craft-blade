@@ -36,5 +36,16 @@
         "name": "Blade",
         "documentationUrl": "https://github.com/thecodezone/craft-blade/blob/master/README.md",
         "hasCpSection": false
+    },
+    "require-dev": {
+        "codeception/codeception": "^4.0",
+        "codeception/module-asserts": "^1.1",
+        "vlucas/phpdotenv": "^4.1",
+        "codeception/module-yii2": "^1.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CodeZone\\Blade\\Tests\\": "tests/"
+        }
     }
 }
