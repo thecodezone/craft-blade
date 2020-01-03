@@ -2,7 +2,7 @@
 return [
     'components' => [
         'view' => function() {
-            $config = \CodeZone\Blade\Plugin::viewConfig();
+            $config = \CodeZone\Blade\Plugin::viewConfig(true);
             return Craft::createObject($config);
         },
     ]

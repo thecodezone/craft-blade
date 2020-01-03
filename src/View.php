@@ -7,6 +7,12 @@ use Twig\Error\LoaderError as TwigLoaderError;
 use Twig\Error\RuntimeError as TwigRuntimeError;
 use Twig\Error\SyntaxError as TwigSyntaxError;
 
+/**
+ * Extend Craft View class to allow blade views along with twig.
+ *
+ * Class View
+ * @package CodeZone\Blade
+ */
 class View extends \craft\web\View
 {
 
@@ -124,8 +130,8 @@ class View extends \craft\web\View
 
             //Merge lazy functions
             $output = str_replace('<![CDATA[YII-BLOCK-HEAD]]>', $this->getHeadHtml(), $output);
-            $output = str_replace('<![CDATA[YII-BLOCK-BODY-BEGIN]]>',$this->getBodyHtml(), $output);
-            $output = str_replace('<![CDATA[YII-BLOCK-BODY-END]]>', $this->renderBodyEndHtml(\Craft::$app->request->isAjax), $output);
+            $output = str_replace('<![CDATA[YII-BLOCK-BODY-BEGIN]]>',$this->renderBodyBeginHtml(), $output);
+            $output = str_replace('<![CDATA[YII-BLOCK-BODY-END]]>', $this->getBodyHtml(), $output);
         } catch (\Throwable $e) {
             // throw it later
         }

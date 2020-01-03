@@ -7,8 +7,16 @@ namespace CodeZone\Blade\Tests\unit;
 use CodeZone\Blade\Tests\TestCase;
 use yii\helpers\BaseHtml;
 
+/**
+ * Class FunctionsTest
+ * @package CodeZone\Blade\Tests\unit
+ */
 class FunctionsTest extends TestCase
 {
+    /**
+     * Cherry pick a few functions to test.
+     * @return \craft\web\View
+     */
     public function view()
     {
         return \Craft::$app->getView();
@@ -37,11 +45,20 @@ class FunctionsTest extends TestCase
         $this->assertContains('CRAFT_CSRF_TOKEN', $this->view()->renderTemplate('functions/csrfInput'));
     }
 
-    public function testItAddsbeginBody()
+    /**
+     * Test lazy functions
+     */
+    public function testItAddsEndBody()
     {
         $js = "animal = 'cat'";
-        $html = $this->view()->renderTemplate('functions/beginBody', compact('js'));
+        $html = $this->view()->renderTemplate('functions/endBody', compact('js'));
         $this->assertContains($js, $html);
     }
 
+    public function testItAddsHead()
+    {
+        $js = "animal = 'cat'";
+        $html = $this->view()->renderTemplate('functions/head', compact('js'));
+        $this->assertContains($js, $html);
+    }
 }

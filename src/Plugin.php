@@ -54,18 +54,19 @@ class Plugin extends \craft\base\Plugin
      * Returns the `view` component config.
      * Falls back to Twig based views for the CP.
      */
-    public static function viewConfig(): array
+    public static function viewConfig($force = false): array
     {
         $request = \Craft::$app->getRequest();
 
-        if ($request->getIsCpRequest()) {
+        if (!$force && ($request->getIsCpRequest() ||
+            !\Craft::$app->plugins->isPluginEnabled('blade'))) {
             return App::viewConfig();
         }
 
         $config = [
             'class' => View::class,
         ];
-
+        
         return $config;
     }
 }

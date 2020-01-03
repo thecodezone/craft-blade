@@ -1,6 +1,6 @@
 <div>
-    @js
+    @js(head)
         {!! $js !!}
     @endjs
-    {!! Fn::beginBody() !!}
+    {!! Fn::head() !!}
 </div>
