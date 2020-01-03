@@ -11,7 +11,7 @@ use CodeZone\Blade\View;
 class Dd implements DirectiveInterface
 {
 
-    public function register(Blade $blade, View $view)
+    public function register(Blade $blade)
     {
         $blade->directive('dd', function ($expression) {
             return "<?php dd({$expression}); ?>";

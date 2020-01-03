@@ -9,5 +9,5 @@ use CodeZone\Blade\View;
 
 interface DirectiveInterface
 {
-    public function register(Blade $blade, View $view);
+    public function register(Blade $blade);
 }

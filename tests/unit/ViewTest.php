@@ -45,16 +45,10 @@ class ViewTest extends TestCase
         );
     }
 
-    public function testInjectsSlots()
-    {
-        $this->view()->registerJs('var head = true;', $this->view()::POS_HEAD);
-        $this->view()->registerJs('var begin = true;', $this->view()::POS_HEAD);
-        $this->view()->registerJs('var end = true;', $this->view()::POS_HEAD);
-
-        $html = $this->view()->renderTemplate('template');
-
-        $this->assertContains('var head = true;', $html);
-        $this->assertContains('var begin = true;', $html);
-        $this->assertContains('var end = true;', $html);
+    public function testItResolvesNested() {
+        $this->assertNotFalse(
+            $this->view()->resolveTemplate('nested/view')
+        );
     }
+
 }

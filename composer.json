@@ -24,7 +24,10 @@
     "autoload": {
         "psr-4": {
             "CodeZone\\Blade\\": "src/"
-        }
+        },
+        "files": [
+            "Src\\Fn.php"
+        ]
     },
     "config": {
         "platform": {

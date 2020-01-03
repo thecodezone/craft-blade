@@ -2,8 +2,6 @@
 
 namespace CodeZone\Blade;
 
-use CodeZone\Blade\Directives\Css;
-use CodeZone\Blade\Directives\Directives;
 use Craft;
 use Twig\Error\LoaderError as TwigLoaderError;
 use Twig\Error\RuntimeError as TwigRuntimeError;
@@ -21,13 +19,8 @@ class View extends \craft\web\View
      */
     private $_blade;
 
-    public function init()
-    {
-        parent::init();
-        $this->registerGlobals();
-        $this->registerFunctions();
-        $this->registerDirectives();
-    }
+    // Public Methods
+    // =========================================================================
 
     /**
      * Get the blade instance
@@ -44,18 +37,39 @@ class View extends \craft\web\View
         return $this->_blade;
     }
 
-
     /**
      * Create a new blade instance.
      *
      * @return Blade
      * @throws \yii\base\Exception
      */
-    public function createBlade() {
-        return $this->_blade = new Blade(
+    public function createBlade(): Blade
+    {
+        $this->_blade = new Blade(
             [rtrim(Craft::$app->getPath()->getSiteTemplatesPath(), '/\\')],
             Craft::$app->getPath()->getCompiledTemplatesPath()
         );
+
+        //Register the globals
+        $this->_blade->composer('*', GlobalsComposer::class);
+
+        //Register the directives
+        foreach (Plugin::getInstance()->getSettings()->directives as $className) {
+            (new $className)->register($this->_blade);
+        }
+
+        return $this->_blade;
+    }
+
+    /**
+     * Is a template string a blade template?
+     * @param string $template
+     * @return bool
+     */
+    public function isBladeTemplate(string $template): bool
+    {
+        $templateFilePath = $this->resolveTemplate($template);
+        return str_contains($templateFilePath, 'blade.php');
     }
 
     /**
@@ -72,8 +86,7 @@ class View extends \craft\web\View
      */
     public function renderTemplate(string $template, array $variables = [], string $templateMode = null): string
     {
-        $templateFilePath = $this->resolveTemplate($template);
-        if (str_contains($templateFilePath, 'blade.php')) {
+        if($this->isBladeTemplate($template)) {
             return $this->renderBladeTemplate($template, $variables, $templateMode);
         } else {
             return parent::renderTemplate($template, $variables, $templateMode);
@@ -86,7 +99,7 @@ class View extends \craft\web\View
      * @return string
      * @throws \Throwable
      */
-    public function renderBladeTemplate(string $template, array $variables = [], $templateMode)
+    public function renderBladeTemplate(string $template, array $variables = [], $templateMode): string
     {
         if ($templateMode === null) {
             $templateMode = $this->getTemplateMode();
@@ -106,10 +119,13 @@ class View extends \craft\web\View
         $viewPath = str_replace('.blade.php', '', $template);
         $viewPath = str_replace('/', '.', $viewPath);
 
-        $this->registerSlots();
-
         try {
             $output = $this->getBlade()->render($viewPath, $variables);
+
+            //Merge lazy functions
+            $output = str_replace('<![CDATA[YII-BLOCK-HEAD]]>', $this->getHeadHtml(), $output);
+            $output = str_replace('<![CDATA[YII-BLOCK-BODY-BEGIN]]>',$this->getBodyHtml(), $output);
+            $output = str_replace('<![CDATA[YII-BLOCK-BODY-END]]>', $this->renderBodyEndHtml(\Craft::$app->request->isAjax), $output);
         } catch (\Throwable $e) {
             // throw it later
         }
@@ -123,30 +139,5 @@ class View extends \craft\web\View
         $this->afterRenderTemplate($template, $variables, $templateMode, $output);
 
         return $output;
-    }
-
-    protected function registerGlobals()
-    {
-        $this->getBlade()->share($this->getTwig()->getGlobals());
-    }
-
-    protected function registerFunctions()
-    {
-        $this->getBlade()->share('functions', new Functions);
-    }
-
-    protected function registerDirectives()
-    {
-        (new Directives($this->getBlade(), $this))->register();
-    }
-
-    /**
-     * Pass along any plugin-generated markup to optional stacks.
-     */
-    protected function registerSlots()
-    {
-        $this->getBlade()->push('head', $this->renderHeadHtml());
-        $this->getBlade()->push('begin', $this->renderBodyBeginHtml());
-        $this->getBlade()->push('end', $this->renderBodyEndHtml(\Craft::$app->getRequest()->isAjax));
     }
 }

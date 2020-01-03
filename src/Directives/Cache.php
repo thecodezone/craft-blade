@@ -10,9 +10,8 @@ use CodeZone\Blade\View;
 
 class Cache implements DirectiveInterface
 {
-    public function register(Blade $blade, View $view)
+    public function register(Blade $blade)
     {
-
         $blade->directive('cache', function ($expression = []) {
             return "<?php if (! " . Cacher::class . "::setUp({$expression})) { ?>";
         });

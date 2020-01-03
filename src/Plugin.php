@@ -2,7 +2,9 @@
 
 namespace CodeZone\Blade;
 
+use CodeZone\Blade\Models\Settings;
 use craft\helpers\App;
+use yii\base\Event;
 
 /**
  * Class Plugin
@@ -15,6 +17,15 @@ class Plugin extends \craft\base\Plugin
         $this->adjustConfig();
 
         parent::init();
+    }
+
+    /**
+     * Register settings model.
+     * @return \craft\base\Model|\ns\prefix\models\Settings|null
+     */
+    protected function createSettingsModel()
+    {
+        return new Settings();
     }
 
     /**

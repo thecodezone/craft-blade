@@ -2,15 +2,12 @@
 
 namespace CodeZone\Blade;
 
-use CodeZone\Blade\Directives\Cache;
-use craft\web\twig\Extension;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\Container as ContainerInterface;
 use Illuminate\Contracts\View\Factory as FactoryContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\Factory;
 use Illuminate\View\ViewServiceProvider;
 
@@ -41,8 +38,7 @@ class Blade implements FactoryContract
         $this->setupContainer((array)$viewPaths, $cachePath);
         (new ViewServiceProvider($this->container))->register();
         $this->factory = $this->container->get('view');
-
-        $this->registerCompiler();
+        $this->compiler = $this->container->get('blade.compiler');
     }
 
     public function render(string $view, array $data = [], array $mergeData = []): string
@@ -121,14 +117,6 @@ class Blade implements FactoryContract
                 'view.compiled' => $cachePath,
             ];
         }, true);
-    }
-
-    protected function registerCompiler()
-    {
-        $this->container['blade.compiler']->extend(function ($view) {
-            return $this->container[CompilerExtension::class]->compile($view);
-        });
-        $this->compiler = $this->container->get('blade.compiler');
     }
 
     public function push($section, $content)

@@ -1,12 +1,11 @@
-@php $content = '<h1>Hello World</h1>'; @endphp
-
 <html>
+    {!! Fn::head() !!}
 <head>
-    @stack("head")
+
 </head>
 <body>
-    @stack('begin')
+    {!! Fn::beginBody() !!}
     {!! $content !!}
-    @stack('end')
+    {!! Fn::endBody() !!}
 </body>
 </html>
