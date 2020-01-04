@@ -1,3 +1,6 @@
+@php
+$content = '';
+@endphp
 <html>
     {!! Fn::head() !!}
 <head>

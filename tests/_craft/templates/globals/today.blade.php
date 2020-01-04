@@ -1,0 +1,1 @@
+Today is {{ $now->format('M j, Y') }}.

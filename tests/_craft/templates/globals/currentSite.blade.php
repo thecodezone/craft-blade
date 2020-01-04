@@ -1,0 +1,1 @@
+{{ $currentSite->name }}

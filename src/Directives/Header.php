@@ -14,7 +14,7 @@ class Header implements DirectiveInterface
     public function register(Blade $blade)
     {
         $blade->directive('header', function ($header) {
-            return "<?php header({$header}); ?>";
+            return "<?php \Craft::\$app->response->headers->set(explode(': ', $header)[0], explode(': ', $header)[1]); ?>";
         });
     }
 }

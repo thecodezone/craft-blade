@@ -36,7 +36,7 @@ class Cacher
         $i = self::$_cacheUniqueCount++;
         self::$_cacheConfig[$n] = $config;
         $if = isset($config['if']) ? $config['if'] : true;
-        $unless = isset($config['if']) ? $config['if'] : false;
+        $unless = isset($config['unless']) ? $config['unless'] : false;
         $key = isset($config['key']) ? $config['key'] : null;
         $global = isset($config['global']) ? $config['global'] : false;
 
