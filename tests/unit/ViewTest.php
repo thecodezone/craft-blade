@@ -13,7 +13,7 @@ class ViewTest extends TestCase
         return \Craft::$app->getView();
     }
 
-    public function testItResolvesFiles()
+    public function testItDoesntResolveMissing()
     {
         $this->assertFalse(
             $this->view()->resolveTemplate('missing')

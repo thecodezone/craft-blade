@@ -10,6 +10,9 @@ use CodeZone\Blade\Directives\ExitDirective;
 use CodeZone\Blade\Directives\Header;
 use CodeZone\Blade\Directives\Hook;
 use CodeZone\Blade\Directives\Js;
+use CodeZone\Blade\Directives\Redirect;
+use CodeZone\Blade\Directives\RequireLogin;
+use CodeZone\Blade\Directives\RequirePermission;
 use craft\base\Model;
 
 class Settings extends Model
@@ -21,7 +24,10 @@ class Settings extends Model
         ExitDirective::class,
         Header::class,
         Hook::class,
-        Js::class
+        Js::class,
+        Redirect::class,
+        RequireLogin::class,
+        RequirePermission::class
     ];
 
     public function rules()

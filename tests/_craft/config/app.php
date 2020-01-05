@@ -1,9 +1,6 @@
 <?php
 return [
     'components' => [
-        'view' => function() {
-            $config = \CodeZone\Blade\Plugin::viewConfig(true);
-            return Craft::createObject($config);
-        },
+        'view' => \CodeZone\Blade\Plugin::registerView(true),
     ]
 ];

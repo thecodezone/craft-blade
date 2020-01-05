@@ -45,9 +45,23 @@ class Plugin extends \craft\base\Plugin
     /**
      * The developer may not have loaded the view.
      */
-    public function viewRegistered()
+    public function viewRegistered(): bool
     {
         return get_class(\Craft::$app->getView()) === View::class;
+    }
+
+    /**
+     * Return the configuration registration closure
+     * @param bool $force
+     * @return \Closure
+     */
+    public static function registerView($force = false): \Closure
+    {
+        return function() use ($force) {
+            return \Craft::createObject(
+                self::viewConfig($force)
+            );
+        };
     }
 
     /**

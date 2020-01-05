@@ -1,5 +1,5 @@
 @php
-$content = '';
+$content = $content ?? '';
 @endphp
 <html>
     {!! Fn::head() !!}

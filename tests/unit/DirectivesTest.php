@@ -51,4 +51,11 @@ class DirectivesTest extends TestCase
         $this->assertStringContainsString('number 2', $html);
         $this->assertStringContainsString('result', $html);
     }
+
+    public function testRedirect()
+    {
+        $this->assertFalse(\Craft::$app->getResponse()->getIsRedirection());
+        \Craft::$app->getView()->renderTemplate('directives/redirect');
+        $this->assertTrue(\Craft::$app->getResponse()->getIsRedirection());
+    }
 }
