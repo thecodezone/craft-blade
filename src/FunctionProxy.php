@@ -4,6 +4,7 @@
 namespace CodeZone\Blade;
 
 
+use CodeZone\Blade\Functions\Factory;
 use Twig\TwigFunction;
 
 /**
@@ -38,6 +39,12 @@ class FunctionProxy
      * @throws MissingBladeFunctionException
      */
     public static function call($name, $arguments = []) {
+        //Custom functions
+        if (Factory::exists($name)) {
+            return Factory::make($name)->call($arguments);
+        }
+
+        //Twig functions
         $function = collect(\Craft::$app->view->getTwig()->getFunctions())->first(function($function) use ($name) {
             return $function->getName() === $name;
         });
