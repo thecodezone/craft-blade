@@ -1,1 +1,1 @@
-{!! Fn::csrfInput() !!}
+{!! Func::csrfInput() !!}

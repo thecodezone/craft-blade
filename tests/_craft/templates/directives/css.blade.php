@@ -1,5 +1,5 @@
 <head>
-    {{ Fn::head() }}
+    {{ Func::head() }}
 </head>
 <div>
     @css

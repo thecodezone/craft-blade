@@ -2,5 +2,5 @@
     @js(head)
         {!! $js !!}
     @endjs
-    {!! Fn::head() !!}
+    {!! Func::head() !!}
 </div>

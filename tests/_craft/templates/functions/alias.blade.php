@@ -1,1 +1,1 @@
-{!! Fn::alias($value) !!}
+{!! Func::alias($value) !!}

@@ -4,9 +4,9 @@ use \CodeZone\Blade\FunctionProxy;
 
 /**
  * Unnamespaced functions proxy.
- * Class Fn
+ * Class Func
  */
-class Fn
+class Func
 {
     public static function __callStatic($name, $arguments)
     {

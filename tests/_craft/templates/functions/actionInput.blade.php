@@ -1,1 +1,1 @@
-{!! Fn::actionInput($path) !!}
+{!! Func::actionInput($path) !!}

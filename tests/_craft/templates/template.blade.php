@@ -2,13 +2,13 @@
 $content = $content ?? '';
 @endphp
 <html>
-    {!! Fn::head() !!}
+    {!! Func::head() !!}
 <head>
 
 </head>
 <body>
-    {!! Fn::beginBody() !!}
+    {!! Func::beginBody() !!}
     {!! $content !!}
-    {!! Fn::endBody() !!}
+    {!! Func::endBody() !!}
 </body>
 </html>

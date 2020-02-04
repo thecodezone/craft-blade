@@ -1,1 +1,1 @@
-{!! Fn::attr($value) !!}
+{!! Func::attr($value) !!}

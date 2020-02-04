@@ -1,5 +1,5 @@
 <div>
-    {!! Fn::endBody() !!}
+    {!! Func::endBody() !!}
     @js
         {{ $js }}
     @endjs
