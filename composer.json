@@ -1,7 +1,6 @@
 {
     "name": "thecodezone/craft-blade",
     "description": "Adds Laravel Blade templating support to Craft CMS.",
-    "version": "0.0.0",
     "type": "craft-plugin",
     "keywords": ["craft", "laravel", "blade", "template"],
     "support": {
