@@ -36,9 +36,11 @@ class Plugin extends \craft\base\Plugin
         if ($this->viewRegistered()) {
             $generalConfig = \Craft::$app->getConfig()->getGeneral();
             $extensions = $generalConfig->defaultTemplateExtensions;
-            $generalConfig->defaultTemplateExtensions = array_unique(
-                array_merge($extensions, ['blade.php'])
-            );
+            if (!array_has($generalConfig->defaultTemplateExtensions,'blade.php')) {
+                $generalConfig->defaultTemplateExtensions = array_unique(
+                    array_merge($extensions, ['blade.php'])
+                );
+            }
         }
     }
 
