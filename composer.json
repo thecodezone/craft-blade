@@ -25,7 +25,7 @@
             "CodeZone\\Blade\\": "src/"
         },
         "files": [
-            "Src\\Func.php"
+            "src\\Func.php"
         ]
     },
     "config": {
