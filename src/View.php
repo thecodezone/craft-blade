@@ -129,9 +129,9 @@ class View extends \craft\web\View
             $output = $this->getBlade()->render($viewPath, $variables);
 
             //Merge lazy functions
-            $output = str_replace('<![CDATA[YII-BLOCK-HEAD]]>', $this->getHeadHtml(), $output);
+            $output = str_replace('<![CDATA[YII-BLOCK-HEAD]]>', $this->renderHeadHtml(), $output);
             $output = str_replace('<![CDATA[YII-BLOCK-BODY-BEGIN]]>',$this->renderBodyBeginHtml(), $output);
-            $output = str_replace('<![CDATA[YII-BLOCK-BODY-END]]>', $this->getBodyHtml(), $output);
+            $output = str_replace('<![CDATA[YII-BLOCK-BODY-END]]>', $this->renderBodyEndHtml(Craft::$app->getRequest()->isAjax), $output);
         } catch (\Throwable $e) {
             // throw it later
         }
